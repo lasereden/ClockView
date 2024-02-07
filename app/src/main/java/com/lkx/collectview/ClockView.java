@@ -22,17 +22,23 @@ public class ClockView extends View {
     private int mWidth;
     private Paint mPaint;
     private int borderPadding = 10; //外边框距离父view的padding
+    private int scalePadding = 30; //刻度距离边框的padding
     private Context mContext;
-    private int textPadding = 42; //刻度数字距离边框的距离
+    private int textPadding = 32; //刻度数字距离边框的距离
     private Calendar mCalendar;
+    private int lastSecond = -1;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             mCalendar = Calendar.getInstance();
-            //重新绘制页面
-            invalidate();
-            //1000ms后再刷新一次页面
-            sendEmptyMessageDelayed(0, 1000);
+            int second = mCalendar.get(Calendar.SECOND);
+            if (second != lastSecond) { //秒数有变化才重新绘制
+                lastSecond = second;
+                //重新绘制页面
+                invalidate();
+            }
+            //250ms后再刷新一次页面
+            sendEmptyMessageDelayed(0, 250);
         }
     };
 
@@ -66,22 +72,24 @@ public class ClockView extends View {
         super.onDraw(canvas);
         mHeight = getMeasuredHeight();
         mWidth = getMeasuredWidth();
-        mPaint.setStrokeWidth(dp2px(3));
-        mPaint.setColor(Color.BLACK);
         mPaint.setAntiAlias(true);
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.STROKE);
         //绘制外环
+        mPaint.setStrokeWidth(dp2px(5));
+        mPaint.setColor(Color.GRAY); // 画阴影
+        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding + 2), mPaint);
+        mPaint.setColor(Color.BLACK);
         canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding), mPaint);
         //绘制刻度,每次绘制完需要旋转一定的角度,然后继续绘制
         for (int i = 0; i < 60; i++) {
             if (i % 5 == 0) {
                 mPaint.setStrokeWidth(dp2px(3));
-                canvas.drawLine(mWidth / 2, dp2px(borderPadding), mWidth / 2, dp2px(23), mPaint);
+                canvas.drawLine(mWidth / 2, dp2px(borderPadding + scalePadding), mWidth / 2, dp2px(23 + scalePadding), mPaint);
             } else {
                 mPaint.setStrokeWidth(dp2px(1));
-                canvas.drawLine(mWidth / 2, dp2px(borderPadding), mWidth / 2, dp2px(20), mPaint);
+                canvas.drawLine(mWidth / 2, dp2px(borderPadding + scalePadding), mWidth / 2, dp2px(20 + scalePadding), mPaint);
             }
             //一共绘制60个刻度,每次旋转360°/60
             canvas.rotate(360 / 60, mWidth / 2, mHeight / 2);
@@ -108,26 +116,26 @@ public class ClockView extends View {
         int hour = mCalendar.get(Calendar.HOUR);
         int minute = mCalendar.get(Calendar.MINUTE);
 
-        //绘制秒针
-        mPaint.setStrokeWidth(dp2px(1));
+        //绘制时针
+        mPaint.setStrokeWidth(dp2px(5));
         mPaint.setColor(Color.BLACK);
         canvas.save();
-        canvas.rotate(second * (365 / 60), mWidth / 2, mHeight / 2);
-        canvas.drawLine(mWidth / 2, dp2px(textPadding) + dp2px(10), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
+        canvas.rotate((hour + (float) minute / 60) * 360 / 12, mWidth / 2, mHeight / 2);
+        canvas.drawLine(mWidth / 2, dp2px(42 + 50), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
         canvas.restore();
         //绘制分针
         mPaint.setStrokeWidth(dp2px(3));
         mPaint.setColor(Color.BLACK);
         canvas.save();
         canvas.rotate((minute + (float) second / 60) * 360 / 60, mWidth / 2, mHeight / 2);
-        canvas.drawLine(mWidth / 2, dp2px(textPadding) + dp2px(20), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
+        canvas.drawLine(mWidth / 2, dp2px(42 + 20), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
         canvas.restore();
-        //绘制时针
-        mPaint.setStrokeWidth(dp2px(5));
-        mPaint.setColor(Color.BLACK);
+        //绘制秒针
+        mPaint.setStrokeWidth(dp2px(1));
+        mPaint.setColor(Color.RED);
         canvas.save();
-        canvas.rotate((hour + (float) minute / 60) * 360 / 12, mWidth / 2, mHeight / 2);
-        canvas.drawLine(mWidth / 2, dp2px(textPadding) + dp2px(50), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
+        canvas.rotate(second * (365 / 60), mWidth / 2, mHeight / 2);
+        canvas.drawLine(mWidth / 2, dp2px(42 + 10), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
         canvas.restore();
         //绘制中心圆点
         mPaint.setColor(Color.RED);

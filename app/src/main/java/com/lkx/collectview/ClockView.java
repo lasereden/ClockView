@@ -58,11 +58,11 @@ public class ClockView extends View {
 
     private void init() {
         mPaint = new Paint();
-//        mPaint.setStrokeWidth(dp2px(2));
-//        mPaint.setColor(Color.RED);
-//        mPaint.setAntiAlias(true);
-//        mPaint.setTextAlign(Paint.Align.CENTER);
-//        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        /*mPaint.setStrokeWidth(dp2px(2));
+        mPaint.setColor(Color.GREEN);
+        mPaint.setAntiAlias(true);
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);*/
         mCalendar = Calendar.getInstance();
         mHandler.sendEmptyMessage(0);
     }
@@ -76,13 +76,16 @@ public class ClockView extends View {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.STROKE);
-        int colorFore = Color.GREEN;
+
         //绘制外环
-        mPaint.setStrokeWidth(dp2px(5));
-//        mPaint.setColor(Color.GRAY); // 画阴影
-//        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding + 2), mPaint);
-        mPaint.setColor(colorFore);
-//        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding), mPaint);
+        /*mPaint.setStrokeWidth(dp2px(5));
+        mPaint.setColor(Color.GRAY); // 画阴影
+        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding + 2), mPaint);
+        mPaint.setColor(Color.GREEN);
+        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding), mPaint); // 画外框*/
+
+        mPaint.setColor(Color.GREEN); // 前景色
+
         //绘制刻度,每次绘制完需要旋转一定的角度,然后继续绘制
         for (int i = 0; i < 60; i++) {
             if (i % 5 == 0) {
@@ -98,6 +101,7 @@ public class ClockView extends View {
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setStrokeWidth(dp2px(1));
         mPaint.setTextSize(dp2px(15));
+
         //绘制刻度数字
         for (int i = 0; i < 12; i++) {
             //保存当前画布状态
@@ -119,27 +123,28 @@ public class ClockView extends View {
 
         //绘制时针
         mPaint.setStrokeWidth(dp2px(5));
-        mPaint.setColor(colorFore);
         canvas.save();
         canvas.rotate((hour + (float) minute / 60) * 360 / 12, mWidth / 2, mHeight / 2);
         canvas.drawLine(mWidth / 2, dp2px(42 + 50), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
         canvas.restore();
+
         //绘制分针
         mPaint.setStrokeWidth(dp2px(3));
-        mPaint.setColor(colorFore);
         canvas.save();
         canvas.rotate((minute + (float) second / 60) * 360 / 60, mWidth / 2, mHeight / 2);
         canvas.drawLine(mWidth / 2, dp2px(42 + 20), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
         canvas.restore();
+
+        mPaint.setColor(Color.RED); // 秒针及中心圆点颜色
+
         //绘制秒针
         mPaint.setStrokeWidth(dp2px(1));
-        mPaint.setColor(Color.RED);
         canvas.save();
         canvas.rotate(second * (365 / 60), mWidth / 2, mHeight / 2);
         canvas.drawLine(mWidth / 2, dp2px(42 + 10), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
         canvas.restore();
+
         //绘制中心圆点
-        mPaint.setColor(Color.RED);
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(mWidth / 2, mHeight / 2, dp2px(5), mPaint);
     }

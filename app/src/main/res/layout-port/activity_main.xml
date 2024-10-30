@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="#000000"
     android:layout_height="match_parent">
 
     <com.lkx.collectview.ClockView
@@ -19,7 +20,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:textSize="80sp"
-        android:textColor="@android:color/black"
+        android:textColor="#00ff00"
         android:text="10:30:24" />
 
     <ImageView

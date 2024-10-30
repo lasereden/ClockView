@@ -76,12 +76,13 @@ public class ClockView extends View {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStyle(Paint.Style.STROKE);
+        int colorFore = Color.GREEN;
         //绘制外环
         mPaint.setStrokeWidth(dp2px(5));
-        mPaint.setColor(Color.GRAY); // 画阴影
-        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding + 2), mPaint);
-        mPaint.setColor(Color.BLACK);
-        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding), mPaint);
+//        mPaint.setColor(Color.GRAY); // 画阴影
+//        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding + 2), mPaint);
+        mPaint.setColor(colorFore);
+//        canvas.drawCircle(mWidth / 2, mHeight / 2, mHeight / 2 - dp2px(borderPadding), mPaint);
         //绘制刻度,每次绘制完需要旋转一定的角度,然后继续绘制
         for (int i = 0; i < 60; i++) {
             if (i % 5 == 0) {
@@ -118,14 +119,14 @@ public class ClockView extends View {
 
         //绘制时针
         mPaint.setStrokeWidth(dp2px(5));
-        mPaint.setColor(Color.BLACK);
+        mPaint.setColor(colorFore);
         canvas.save();
         canvas.rotate((hour + (float) minute / 60) * 360 / 12, mWidth / 2, mHeight / 2);
         canvas.drawLine(mWidth / 2, dp2px(42 + 50), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
         canvas.restore();
         //绘制分针
         mPaint.setStrokeWidth(dp2px(3));
-        mPaint.setColor(Color.BLACK);
+        mPaint.setColor(colorFore);
         canvas.save();
         canvas.rotate((minute + (float) second / 60) * 360 / 60, mWidth / 2, mHeight / 2);
         canvas.drawLine(mWidth / 2, dp2px(42 + 20), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);

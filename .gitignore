@@ -99,3 +99,4 @@ tmp/
 # Windows
 Thumbs.db
 
+app/src/main/res/drawable/logo.xml

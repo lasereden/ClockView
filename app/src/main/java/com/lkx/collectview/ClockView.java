@@ -86,7 +86,7 @@ public class ClockView extends View {
         //绘制刻度,每次绘制完需要旋转一定的角度,然后继续绘制
         for (int i = 0; i < 60; i++) {
             if (i % 5 == 0) {
-                mPaint.setColor(Color.GREEN);
+                mPaint.setColor(Color.GREEN & Color.LTGRAY);
                 mPaint.setStrokeWidth(dp2px(3));
                 canvas.drawLine(mWidth / 2, dp2px(scalePadding), mWidth / 2, dp2px(scalePadding + 13), mPaint);
             } else {
@@ -98,7 +98,7 @@ public class ClockView extends View {
             canvas.rotate(360 / 60, mWidth / 2, mHeight / 2);
         }
 
-        mPaint.setColor(Color.GREEN); // 前景色
+        mPaint.setColor(Color.GREEN & Color.LTGRAY); // 前景色
 
         //绘制刻度数字
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -136,7 +136,7 @@ public class ClockView extends View {
         canvas.drawLine(mWidth / 2, dp2px(scalePadding + 22), mWidth / 2, mHeight / 2 + dp2px(20), mPaint);
         canvas.restore();
 
-        mPaint.setColor(Color.RED); // 秒针及中心圆点颜色
+        mPaint.setColor(Color.RED & Color.LTGRAY); // 秒针及中心圆点颜色
 
         //绘制秒针
         mPaint.setStrokeWidth(dp2px(1));

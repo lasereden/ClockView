@@ -20,11 +20,11 @@
         <TextView
             android:id="@+id/textViewTime"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="10:30:24"
-            android:textColor="#00ff00"
+            android:text="@string/time"
+            android:textColor="#00cc00"
             android:textSize="80sp" />
 
         <ImageView
@@ -33,6 +33,7 @@
             android:layout_height="64dp"
             android:layout_margin="64dp"
             android:layout_gravity="end"
+            android:contentDescription="@string/app_name"
             app:srcCompat="@drawable/logo" />
 
     </LinearLayout>

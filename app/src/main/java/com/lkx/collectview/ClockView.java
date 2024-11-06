@@ -90,7 +90,7 @@ public class ClockView extends View {
                 mPaint.setStrokeWidth(dp2px(3));
                 canvas.drawLine(mWidth / 2, dp2px(scalePadding), mWidth / 2, dp2px(scalePadding + 13), mPaint);
             } else {
-                mPaint.setColor(Color.GREEN & Color.DKGRAY);
+                mPaint.setColor(Color.GREEN & Color.GRAY);
                 mPaint.setStrokeWidth(dp2px(1));
                 canvas.drawLine(mWidth / 2, dp2px(scalePadding), mWidth / 2, dp2px(scalePadding + 10), mPaint);
             }

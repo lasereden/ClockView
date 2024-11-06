@@ -1,6 +1,12 @@
 package com.lkx.collectview;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
     private int diameterPixels;
     private int lastSecond = -1;
 
+    private BatteryLevelReceiver receiver;
+    private int batteryPct;
+    private boolean isCharging;
+    private boolean usbCharge;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -35,6 +46,33 @@ public class MainActivity extends AppCompatActivity {
             sendEmptyMessageDelayed(0, 250);
         }
     };
+
+    private class BatteryLevelReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
+                // 获取电池电量的百分比
+                int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                // 获取电池总容量
+                int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 0);
+                batteryPct = level * 100 / scale;
+
+                // 电池电量的状态
+                int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
+                isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                        status == BatteryManager.BATTERY_STATUS_FULL;
+
+                // 是否使用USB充电
+                int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
+                usbCharge = plugged == BatteryManager.BATTERY_PLUGGED_USB;
+
+                // 输出电量信息
+                Log.d("BatteryLevelReceiver", "Battery: " + batteryPct + "% " + (isCharging ? "Charging" : "Discharging") + (usbCharge ? " via USB" : ""));
+                showBattery();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +93,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        // 在Activity或其他组件中注册广播接收器
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        receiver = new BatteryLevelReceiver();
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // 不要忘记在不需要的时候注销广播接收器
+        unregisterReceiver(receiver);
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.activity_main);
         fixOrientation(newConfig.orientation);
+        showBattery();
     }
 
     private void fixOrientation(int orientation) {
@@ -72,5 +129,15 @@ public class MainActivity extends AppCompatActivity {
             params.width = diameterPixels;
         }
         clockView.setLayoutParams(params);
+    }
+
+    private void showBattery() {
+        TextView textViewBattery = findViewById(R.id.textViewBattery);
+        textViewBattery.setText("Battery: " + batteryPct + "% " + (isCharging ? "Charging" : "Discharging") + (usbCharge ? " via USB" : ""));
+        if (isCharging) {
+            textViewBattery.setTextColor(Color.GREEN & Color.DKGRAY);
+        } else {
+            textViewBattery.setTextColor(Color.DKGRAY);
+        }
     }
 }

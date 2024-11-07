@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ClockView</string>
-    <string name="time">10:30:24</string>
+    <string name="time">00:00:00</string>
+    <string name="battery">Battery</string>
 </resources>

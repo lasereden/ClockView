@@ -34,7 +34,7 @@
             android:textColor="#444444"
             android:textSize="20sp"
             android:gravity="center"
-            android:text="Battery" />
+            android:text="@string/battery" />
 
         <ImageView
             android:id="@+id/imageViewLogo"

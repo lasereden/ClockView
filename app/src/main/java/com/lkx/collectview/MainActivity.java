@@ -107,10 +107,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void showBattery() {
         TextView textViewBattery = findViewById(R.id.textViewBattery);
-        textViewBattery.setText("Battery: " + batteryPct + "% " + (isCharging ? "Charging" : "Discharging") + (usbCharge ? " via USB" : ""));
         if (isCharging) {
-            textViewBattery.setTextColor(Color.GREEN & Color.DKGRAY);
+            if (batteryPct >= 100) {
+                textViewBattery.setText("电量" + batteryPct + "%" + " 已充满");
+                textViewBattery.setTextColor(Color.GREEN);
+            } else {
+                textViewBattery.setText("电量" + batteryPct + "%" + " 充电中" + (usbCharge ? " 连接USB" : ""));
+                textViewBattery.setTextColor(Color.GREEN & Color.DKGRAY);
+            }
         } else {
+            textViewBattery.setText("电量" + batteryPct + "%");
             textViewBattery.setTextColor(Color.DKGRAY);
         }
     }
